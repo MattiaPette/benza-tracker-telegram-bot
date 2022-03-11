@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "lib": ["es6", "dom"],
+    "module": "ES6",
+    "moduleResolution": "node",
+    "target": "ES6",
+    "strict": true,
+    "sourceMap": true,
+    "declaration": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "outDir": "build"
+  },
+  "include": ["src/**/*.ts", "./typings.d.ts"],
+  "exclude": [
+    "**/lib/**",
+    "**/node_modules/**",
+    "**/.yarn/**",
+    "**/.serverless/**"
+  ]
+}

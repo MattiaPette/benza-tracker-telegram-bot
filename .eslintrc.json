@@ -1,0 +1,44 @@
+{
+  "root": true,
+  "extends": [
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:functional/external-recommended",
+    "plugin:functional/lite",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["functional", "prettier", "unused-imports"],
+  "rules": {
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/prefer-readonly-parameter-types": "off"
+  },
+  "parser": "@typescript-eslint/parser",
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parserOptions": {
+        "project": ["./tsconfig.json"]
+      }
+    },
+    {
+      "files": ["**/*.d.ts"],
+      "rules": {
+        "functional/prefer-type-literal": "off",
+        "functional/prefer-readonly-type": "off"
+      }
+    },
+    {
+      "files": ["**/*.d.ts"],
+      "rules": {
+        "functional/prefer-type-literal": "off",
+        "functional/prefer-readonly-type": "off"
+      }
+    },
+    {
+      "files": ["**/*.spec.ts"],
+      "rules": {
+        "functional/no-let": "off"
+      }
+    }
+  ]
+}
