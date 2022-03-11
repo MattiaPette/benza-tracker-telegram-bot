@@ -1,0 +1,73 @@
+service: benza-tracker-bot-${env:ENV}-v1
+
+configValidationMode: error
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ${env:REGION}
+  memorySize: 512
+  timeout: 10
+  logRetentionInDays: 7
+  deploymentBucket:
+    blockPublicAccess: true
+  lambdaHashingVersion: 20201221
+  stackName: benza-tracker-bot-${env:ENV}-v1
+  iam:
+    role:
+      name: benza-tracker-bot-${env:ENV}-v1-lambdaRole
+
+package:
+  individually: true
+
+plugins:
+  - serverless-esbuild
+
+custom:
+  esbuild:
+    packager: yarn
+    bundle: true
+    minify: true
+    sourcemap: true
+    keepNames: true
+
+functions:
+  incomingWebhook:
+    name: benza-tracker-bot-${env:ENV}-v1-incoming-webhook
+    handler: src/index.incomingWebhookHandler
+    role: BenzaTrackerBotLambdaRole
+    events:
+      - http:
+          path: /incoming-webhook
+          method: get
+    environment:
+      DEBUG: ${env:DEBUG}
+
+resources:
+  Resources:
+    BenzaTrackerBotLambdaRole:
+      Type: 'AWS::IAM::Role'
+      Properties:
+        RoleName: 'BenzaTrackerBot-LambdaRole-${env:ENV}'
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: 'Allow'
+              Principal:
+                Service:
+                  - 'lambda.amazonaws.com'
+              Action:
+                - 'sts:AssumeRole'
+        Policies:
+          - PolicyName: 'BenzaTrackerBot-Policy-${env:ENV}'
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: 'Allow'
+                  Action:
+                    - 'logs:CreateLogGroup'
+                    - 'logs:CreateLogStream'
+                    - 'logs:PutLogEvents'
+                  Resource:
+                    - 'arn:aws:logs:${env:REGION}:*:log-group:/aws/lambda/*:*:*'
