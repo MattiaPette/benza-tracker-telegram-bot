@@ -8,7 +8,7 @@ provider:
   runtime: nodejs14.x
   region: ${env:REGION}
   memorySize: 512
-  timeout: 10
+  timeout: 30
   logRetentionInDays: 7
   deploymentBucket:
     blockPublicAccess: true
@@ -39,10 +39,12 @@ functions:
     role: BenzaTrackerBotLambdaRole
     events:
       - http:
-          path: /incoming-webhook
-          method: get
+          path: /incoming-webhook/bot${env:TELEGRAM_BOT_TOKEN}
+          method: post
     environment:
       DEBUG: ${env:DEBUG}
+      TELEGRAM_BOT_TOKEN: ${env:TELEGRAM_BOT_TOKEN}
+      FUEL_API_BASE_URL: ${env:FUEL_API_BASE_URL}
 
 resources:
   Resources:
